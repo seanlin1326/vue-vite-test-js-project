@@ -22,6 +22,10 @@
           v-show="!rule2IsValid"
           :message="rule2Hint"
         ></PasswordBaseAlert>
+        <PasswordBaseAlert
+          v-show="!rule3IsValid"
+          :message="rule3Hint"
+        ></PasswordBaseAlert>
       </v-col>
     </v-row>
   </v-container>
@@ -36,6 +40,7 @@ const passwordInputValue = ref("");
 const passwordLength = ref(0);
 const rule1IsValid = ref(false);
 const rule2IsValid = ref(false);
+const rule3IsValid = ref(false);
 const alertTest = () => {
   Swal.fire({
     title: "恭喜你成功註冊了 👋",
@@ -60,6 +65,10 @@ const checkPassWordValidOrNot = (password) => {
   if (!rule2IsValid.value) {
     isPass = false;
   }
+  rule3IsValid.value = checkPasswordContainUpperAlphabet(password);
+  if (!rule3IsValid.value) {
+    isPass = false;
+  }
   return isPass;
 };
 //限制1:字數必須超過10
@@ -76,6 +85,11 @@ watch(passwordInputValue, (newValue) => {
 const rule2Hint = "規則2:必須包含一個阿拉伯數字";
 const checkPasswordContainNumber = (password) => {
   return /\d/.test(password);
+};
+//限制2:必須包含一個大寫英文字母
+const rule3Hint = "規則3:須包含一個大寫英文字母";
+const checkPasswordContainUpperAlphabet = (password) => {
+  return /[A-Z]/.test(password);
 };
 </script>
 
