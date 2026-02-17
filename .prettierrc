@@ -1,0 +1,9 @@
+{
+  "semi": true,             // 是否加分號
+  "singleQuote": true,      // 單引號
+  "trailingComma": "es5",   // 尾逗號
+  "printWidth": 100,        // 換行長度
+  "tabWidth": 2,            // 縮排
+  "useTabs": false,         // 用空格縮排
+  "vueIndentScriptAndStyle": true // <script> 和 <style> 內也縮排
+}
