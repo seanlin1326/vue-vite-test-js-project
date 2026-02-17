@@ -18,6 +18,10 @@
           v-show="!rule1IsValid"
           :message="rule1Hint"
         ></PasswordBaseAlert>
+        <PasswordBaseAlert
+          v-show="!rule2IsValid"
+          :message="rule2Hint"
+        ></PasswordBaseAlert>
       </v-col>
     </v-row>
   </v-container>
@@ -31,6 +35,7 @@ const passwordIsValid = ref(false);
 const passwordInputValue = ref("");
 const passwordLength = ref(0);
 const rule1IsValid = ref(false);
+const rule2IsValid = ref(false);
 const alertTest = () => {
   Swal.fire({
     title: "恭喜你成功註冊了 👋",
@@ -51,17 +56,27 @@ const checkPassWordValidOrNot = (password) => {
   if (!rule1IsValid.value) {
     isPass = false;
   }
+  rule2IsValid.value = checkPasswordContainNumber(password);
+  if (!rule2IsValid.value) {
+    isPass = false;
+  }
   return isPass;
 };
 //限制1:字數必須超過10
 const checkPassWordLength = (password) => {
-  return password.length >= 10;
+  return password.length >= 5;
 };
-const rule1Hint = ref(`規則1:密碼字數不可以低於10個,當前字數為0個`);
+const rule1Hint = ref(`規則1:密碼字數不可以低於5個,當前字數為0個`);
 watch(passwordInputValue, (newValue) => {
   // console.log("new:", newValue);
-  rule1Hint.value = `規則1:密碼字數不可以低於10個,當前字數為${newValue.length}`;
+  rule1Hint.value = `規則1:密碼字數不可以低於5個,當前字數為${newValue.length}`;
 });
+
+//限制2:必須包含一個字元
+const rule2Hint = "規則2:必須包含一個阿拉伯數字";
+const checkPasswordContainNumber = (password) => {
+  return /\d/.test(password);
+};
 </script>
 
 <style scoped>
