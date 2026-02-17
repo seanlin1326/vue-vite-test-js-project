@@ -34,6 +34,10 @@
           v-show="!rule5IsValid"
           :message="rule5Hint"
         ></PasswordBaseAlert>
+        <PasswordBaseAlert
+          v-show="!rule6IsValid"
+          :message="rule6Hint"
+        ></PasswordBaseAlert>
       </v-col>
     </v-row>
   </v-container>
@@ -51,6 +55,7 @@ const rule2IsValid = ref(false);
 const rule3IsValid = ref(false);
 const rule4IsValid = ref(false);
 const rule5IsValid = ref(false);
+const rule6IsValid = ref(false);
 const alertTest = () => {
   Swal.fire({
     title: "恭喜你成功註冊了 👋",
@@ -87,6 +92,10 @@ const checkPassWordValidOrNot = (password) => {
   if (!rule5IsValid.value) {
     isPass = false;
   }
+  rule6IsValid.value = checkPasswordContainMonthStr(password);
+  if (!rule6IsValid.value) {
+    isPass = false;
+  }
   return isPass;
 };
 //限制1:字數必須超過10
@@ -118,17 +127,36 @@ const checkPasswordContainSpecialSymbol = (password) => {
 const rule5Hint = ref("限制5:所有的數字字元加總要等於25,當前加總為0");
 watch(passwordInputValue, (newValue) => {
   // console.log("new:", newValue);
-  const sum = getStringAllNumberDigitSem(newValue);
-  console.log(sum);
+  const sum = getStringAllNumberDigitSum(newValue);
   rule5Hint.value = `限制5:所有的數字字元加總要等於25,當前加總為${sum}`;
 });
 const checkPasswordNumberSumIs25 = (password) => {
-  return getStringAllNumberDigitSem(password) === 25;
+  return getStringAllNumberDigitSum(password) === 25;
 };
-const getStringAllNumberDigitSem = (string) => {
-  const numberDigits = string.match(/\d/g);
+const getStringAllNumberDigitSum = (string) => {
+  const numberDigits = string.match(/\d/g) ?? [];
   const sum = numberDigits.reduce((acc, num) => acc + Number(num), 0);
   return sum;
+};
+//限制6:密碼內需要包括任一月份的英文(EX:january)
+const rule6Hint = "限制6:密碼內需要包括任一月份的英文(EX:january)";
+const checkPasswordContainMonthStr = (password) => {
+  const months = [
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+  ];
+  const lowerPassword = password.toLowerCase();
+  return months.some((month) => lowerPassword.includes(month));
 };
 </script>
 
