@@ -30,6 +30,10 @@
           v-show="!rule4IsValid"
           :message="rule4Hint"
         ></PasswordBaseAlert>
+        <PasswordBaseAlert
+          v-show="!rule5IsValid"
+          :message="rule5Hint"
+        ></PasswordBaseAlert>
       </v-col>
     </v-row>
   </v-container>
@@ -46,6 +50,7 @@ const rule1IsValid = ref(false);
 const rule2IsValid = ref(false);
 const rule3IsValid = ref(false);
 const rule4IsValid = ref(false);
+const rule5IsValid = ref(false);
 const alertTest = () => {
   Swal.fire({
     title: "恭喜你成功註冊了 👋",
@@ -78,6 +83,10 @@ const checkPassWordValidOrNot = (password) => {
   if (!rule4IsValid.value) {
     isPass = false;
   }
+  rule5IsValid.value = checkPasswordNumberSumIs25(password);
+  if (!rule5IsValid.value) {
+    isPass = false;
+  }
   return isPass;
 };
 //限制1:字數必須超過10
@@ -104,6 +113,22 @@ const checkPasswordContainUpperAlphabet = (password) => {
 const rule4Hint = "規則4:必須包含一個特殊字元";
 const checkPasswordContainSpecialSymbol = (password) => {
   return /[()\`~!@#$%\^&*\-+=|\\{}\[\]:;"'<>,.?\/]/.test(password);
+};
+//限制5:所有的數字字元加總要等於25
+const rule5Hint = ref("限制5:所有的數字字元加總要等於25,當前加總為0");
+watch(passwordInputValue, (newValue) => {
+  // console.log("new:", newValue);
+  const sum = getStringAllNumberDigitSem(newValue);
+  console.log(sum);
+  rule5Hint.value = `限制5:所有的數字字元加總要等於25,當前加總為${sum}`;
+});
+const checkPasswordNumberSumIs25 = (password) => {
+  return getStringAllNumberDigitSem(password) === 25;
+};
+const getStringAllNumberDigitSem = (string) => {
+  const numberDigits = string.match(/\d/g);
+  const sum = numberDigits.reduce((acc, num) => acc + Number(num), 0);
+  return sum;
 };
 </script>
 
